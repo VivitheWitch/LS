@@ -8,7 +8,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
-namespace Teemo
+namespace Teemo2
 {
     class Program
     {
@@ -33,7 +33,7 @@ namespace Teemo
             E = new Spell(SpellSlot.E, 0);
             R = new Spell(SpellSlot.R, 0);
             //Base menu
-            SF = new Menu("VTW" + ChampName, ChampName, true);
+            SF = new Menu("SF" + ChampName, ChampName, true);
             //Orbwalker and menu
             SF.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
             Orbwalker = new Orbwalking.Orbwalker(SF.SubMenu("Orbwalker"));
@@ -49,14 +49,14 @@ namespace Teemo
             SF.SubMenu("Combo").AddItem(new MenuItem("useR", "Use R?").SetValue(false));
             SF.SubMenu("Combo").AddItem(new MenuItem("ComboActive", "Combo").SetValue(new KeyBind(32, KeyBindType.Press)));
             //Exploits
-            SF.AddItem(new MenuItem("NFE", "No-Face Exploit").SetValue(false));
+            SF.AddItem(new MenuItem("NFE", "No-Face Exploit").SetValue(true));
             //Make the menu visible
             SF.AddToMainMenu();
 
             Drawing.OnDraw += Drawing_OnDraw; // Add onDraw
             Game.OnGameUpdate += Game_OnGameUpdate; // adds OnGameUpdate (Same as onTick in bol)
 
-            Game.PrintChat("VTW" + ChampName + " captain teemo on duty! by ViviTheWitch");
+            Game.PrintChat("VTW"+ChampName+" Captain Teemo On Duty! by VivitheWitch");
         }
 
         static void Game_OnGameUpdate(EventArgs args)
@@ -69,7 +69,6 @@ namespace Teemo
 
         static void Drawing_OnDraw(EventArgs args)
         {
-            Utility.DrawCircle(Player.Position, Q.Range, Color.Ivory);
         }
 
         public static void Combo()
@@ -77,12 +76,10 @@ namespace Teemo
             var target = SimpleTs.GetTarget(Q.Range, SimpleTs.DamageType.Magical);
             if (target == null) return;
 
-            if (target.IsValidTarget(DFG.Range) && DFG.IsReady())
-                DFG.Cast(target);
-            if (target.IsValidTarget(Q.Range) && Q.IsReady())
+          if (target.IsValidTarget(Q.Range) && Q.IsReady())
             {
                 Q.Cast(target, SF.Item("NFE").GetValue<bool>());
-
+                
             }
             if (target.IsValidTarget(W.Range) && W.IsReady())
             {
@@ -96,7 +93,6 @@ namespace Teemo
             {
                 R.Cast(target, SF.Item("NFE").GetValue<bool>());
             }
-
         }
     }
 }
