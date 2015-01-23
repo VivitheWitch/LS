@@ -73,7 +73,7 @@ namespace Vayne
 
 
             //Creating a menu
-            Config = new Menu("PG", "Vayne", true);
+            Config = new Menu("PGVayne", "Vayne", true);
 
             //Ts nothing for you to do here
             var targetSelectorMenu = new Menu("Target Selector", "Target Selector");
@@ -137,18 +137,18 @@ namespace Vayne
         {
 
 
-            var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical); //Getting a target
+            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical); //Getting a target
             if (target == null) return; //If there is no target, return.
 
             //Combo
-            if (Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>())) //If W is ready & UseWCombo is held down then
+            if (Q.IsReady() && (Config.Item("UseECombo").GetValue<bool>())) //If W is ready & UseWCombo is held down then
             {
-                var prediction = Q.GetPrediction(target); //Create prediction based on W values and the targets movement
+                var prediction = E.GetPrediction(target); //Create prediction based on W values and the targets movement
 
                 //if the chance of hitting is high and if there are less then 2 minions inbetween you and the target then   
                 if (prediction.Hitchance >= HitChance.High && prediction.CollisionObjects.Count(h => h.IsEnemy && !h.IsDead && h is Obj_AI_Minion) < 2) //(if u want it to not do anything when there is a minion in between you and target make 2 to 0)
                 {
-                    Q.Cast(prediction.CastPosition); //Cast W on the predicted targets on the predicted place
+                    E.Cast(prediction.CastPosition); //Cast W on the predicted targets on the predicted place
 
                 }
             }
