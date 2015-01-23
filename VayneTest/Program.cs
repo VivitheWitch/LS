@@ -57,11 +57,6 @@ namespace Vayne
             E = new Spell(SpellSlot.E, 550); //Making E an actuall spell. You need to put the range of the spell here.
             R = new Spell(SpellSlot.R, 0); //Making R an actuall spell. You need to put the range of the spell here
 
-            //SetSkillshot(Distancef, Width, Speed, Collission, Skillshot Type); This will be used for Spell Prediction.
-            Q.SetSkillshot(0f, 0, 0, false, SkillshotType.SkillshotCone);
-            W.SetSkillshot(0f, 0, 0, false, SkillshotType.SkillshotLine);
-            E.SetSkillshot(0f, 0, 0, true, SkillshotType.SkillshotCircle);
-
             //Adds a spell to theSpellList, nothing much to explain here.
             SpellList.Add(Q);
             SpellList.Add(W);
@@ -86,10 +81,8 @@ namespace Vayne
 
             //Combo Menu
             Config.AddSubMenu(new Menu("Combo", "Combo")); //Creating a submenu
-            Config.SubMenu("Combo").AddItem(new MenuItem("UseWCombo", "Use Q")).SetValue(true); //Adding an item to the submenu (toggle)
             Config.SubMenu("Combo").AddItem(new MenuItem("UseECombo", "Use E")).SetValue(true);  //Adding an item to the submenu (toggle)
             Config.SubMenu("Combo").AddItem(new MenuItem("KSE", "KS with E")).SetValue(true);  //Adding an item to the submenu (toggle)
-            Config.SubMenu("Combo").AddItem(new MenuItem("UseItems", "Use Items")).SetValue(true);  //Adding an item to the submenu (toggle)
             Config.SubMenu("Combo").AddItem(new MenuItem("ActiveCombo", "Combo!").SetValue(new KeyBind(32, KeyBindType.Press)));  //Adding an item to the submenu (on key down (hotkey))
 
             //Range Drawings same concept as the Combo menu
