@@ -141,7 +141,7 @@ namespace Vayne
             if (target == null) return; //If there is no target, return.
 
             //Combo
-            if (Q.IsReady() && (Config.Item("UseECombo").GetValue<bool>())) //If W is ready & UseWCombo is held down then
+            if (E.IsReady() && (Config.Item("UseECombo").GetValue<bool>())) //If W is ready & UseWCombo is held down then
             {
                 var prediction = E.GetPrediction(target); //Create prediction based on W values and the targets movement
 
