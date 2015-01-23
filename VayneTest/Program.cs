@@ -73,7 +73,7 @@ namespace Vayne
 
 
             //Creating a menu
-            Config = new Menu("Display_Name_Of_Menu_In-Game", "String_Name", true);
+            Config = new Menu("PG", "Vayne", true);
 
             //Ts nothing for you to do here
             var targetSelectorMenu = new Menu("Target Selector", "Target Selector");
@@ -87,11 +87,9 @@ namespace Vayne
             //Combo Menu
             Config.AddSubMenu(new Menu("Combo", "Combo")); //Creating a submenu
             Config.SubMenu("Combo").AddItem(new MenuItem("UseWCombo", "Use Q")).SetValue(true); //Adding an item to the submenu (toggle)
-            Config.SubMenu("Combo").AddItem(new MenuItem("UseWCombo", "Use W")).SetValue(false); //Adding an item to the submenu (toggle)
             Config.SubMenu("Combo").AddItem(new MenuItem("UseECombo", "Use E")).SetValue(true);  //Adding an item to the submenu (toggle)
-            Config.SubMenu("Combo").AddItem(new MenuItem("UseRCombo", "Use R")).SetValue(false);  //Adding an item to the submenu (toggle)
+            Config.SubMenu("Combo").AddItem(new MenuItem("KSE", "KS with E")).SetValue(true);  //Adding an item to the submenu (toggle)
             Config.SubMenu("Combo").AddItem(new MenuItem("UseItems", "Use Items")).SetValue(true);  //Adding an item to the submenu (toggle)
-            Config.SubMenu("Combo").AddItem(new MenuItem("KSW", "KS with W")).SetValue(false);  //Adding an item to the submenu (toggle)
             Config.SubMenu("Combo").AddItem(new MenuItem("ActiveCombo", "Combo!").SetValue(new KeyBind(32, KeyBindType.Press)));  //Adding an item to the submenu (on key down (hotkey))
 
             //Range Drawings same concept as the Combo menu
@@ -127,9 +125,9 @@ namespace Vayne
                 Combo(); //Execute Combo()
             }
 
-            if (Config.Item("KSW").GetValue<bool>()) //If Killsteal is toggled on in menu
+            if (Config.Item("KSE").GetValue<bool>()) //If Killsteal is toggled on in menu
             {
-                KSW(); //Execute KSW()
+                KSE(); //Execute KSW()
             }
 
 
@@ -143,14 +141,14 @@ namespace Vayne
             if (target == null) return; //If there is no target, return.
 
             //Combo
-            if (W.IsReady() && (Config.Item("UseWCombo").GetValue<bool>())) //If W is ready & UseWCombo is held down then
+            if (Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>())) //If W is ready & UseWCombo is held down then
             {
-                var prediction = W.GetPrediction(target); //Create prediction based on W values and the targets movement
+                var prediction = Q.GetPrediction(target); //Create prediction based on W values and the targets movement
 
                 //if the chance of hitting is high and if there are less then 2 minions inbetween you and the target then   
                 if (prediction.Hitchance >= HitChance.High && prediction.CollisionObjects.Count(h => h.IsEnemy && !h.IsDead && h is Obj_AI_Minion) < 2) //(if u want it to not do anything when there is a minion in between you and target make 2 to 0)
                 {
-                    W.Cast(prediction.CastPosition); //Cast W on the predicted targets on the predicted place
+                    Q.Cast(prediction.CastPosition); //Cast W on the predicted targets on the predicted place
 
                 }
             }
@@ -178,21 +176,21 @@ namespace Vayne
         }
 
 
-        private static void KSW() //This is a Killsteal feature
+        private static void KSE() //This is a Killsteal feature
         {
-            var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
+            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
             if (target == null) return;
 
-            var prediction = W.GetPrediction(target);
+            var prediction = E.GetPrediction(target);
 
-            if (W.IsReady()) //If W is ready
+            if (E.IsReady()) //If W is ready
             {
 
-                if (target.Health < GetWDamage(target)) //If target's hp is lower then the damage of spell W. Its calling the function GetWDamge here which can be found below
+                if (target.Health < GetEDamage(target)) //If target's hp is lower then the damage of spell W. Its calling the function GetWDamge here which can be found below
                 {
                     if (prediction.Hitchance >= HitChance.High && prediction.CollisionObjects.Count(h => h.IsEnemy && !h.IsDead && h is Obj_AI_Minion) < 1)
                     {
-                        W.Cast(prediction.CastPosition);
+                        E.Cast(prediction.CastPosition);
                     }
 
 
@@ -201,12 +199,12 @@ namespace Vayne
         }
 
 
-        private static float GetWDamage(Obj_AI_Base enemy) //Function of calculating the damage of W skill
+        private static float GetEDamage(Obj_AI_Base enemy) //Function of calculating the damage of W skill
         {
             double damage = 0d; //Defining damage as a double
 
-            if (W.IsReady()) //Only calculate if W is 
-                damage += Player.GetSpellDamage(enemy, SpellSlot.W);
+            if (E.IsReady()) //Only calculate if W is 
+                damage += Player.GetSpellDamage(enemy, SpellSlot.E);
 
             return (float)damage * 2; //return damage of W back to the function of KS W
         }
